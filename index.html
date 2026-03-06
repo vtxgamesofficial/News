@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SayHey News</title>
+<style>
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#0f0f10;
+    color:white;
+}
+
+header{
+    padding:20px;
+    font-size:28px;
+    font-weight:bold;
+    border-bottom:1px solid #222;
+}
+
+#news{
+    max-width:900px;
+    margin:auto;
+    padding:20px;
+}
+
+.article{
+    background:#18181b;
+    border-radius:12px;
+    margin-bottom:20px;
+    overflow:hidden;
+    transition:.2s;
+}
+
+.article:hover{
+    transform:scale(1.02);
+}
+
+.article img{
+    width:100%;
+    height:200px;
+    object-fit:cover;
+}
+
+.content{
+    padding:16px;
+}
+
+.title{
+    font-size:20px;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+.summary{
+    color:#aaa;
+    margin-bottom:10px;
+}
+
+.category{
+    font-size:12px;
+    background:#2563eb;
+    padding:4px 8px;
+    border-radius:6px;
+    display:inline-block;
+}
+</style>
+</head>
+
+<body>
+
+<header>📰 SayHey News</header>
+
+<div id="news">Loading articles...</div>
+
+<script>
+
+const API_KEY = "snk_ef3c7822042a5b403205051b601c6ea5c04c720a04114b83";
+const API = "https://news.vtxgames.co.uk/api/v1/articles?limit=10";
+
+async function loadNews(){
+
+    const res = await fetch(API,{
+        headers:{
+            "X-Api-Key":API_KEY
+        }
+    });
+
+    const data = await res.json();
+
+    const container = document.getElementById("news");
+    container.innerHTML = "";
+
+    data.articles.forEach(article => {
+
+        const div = document.createElement("div");
+        div.className = "article";
+
+        div.innerHTML = `
+        <a href="${article.url}" target="_blank" style="text-decoration:none;color:white;">
+            <img src="${article.imageUrl}" onerror="this.style.display='none'">
+            <div class="content">
+                <div class="title">${article.title}</div>
+                <div class="summary">${article.summary}</div>
+                <div class="category">${article.category}</div>
+            </div>
+        </a>
+        `;
+
+        container.appendChild(div);
+    });
+}
+
+loadNews();
+
+</script>
+
+</body>
+</html>
